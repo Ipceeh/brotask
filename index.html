@@ -7,20 +7,25 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 </head>
 <body>
-	<div class="container" >
-		<div id="col-vector">
+	<div class="container" id="tab1">
+		<div class="vector vector-col">
+			<button class="cell edit del">
+				<i class="fas fa-minus"></i>
+			</button>
 		</div>
-		<div id="row-vector">
+		<div class="vector vector-row">
+			<button class="cell edit del">
+				<i class="fas fa-minus"></i>
+			</button>
 		</div>
-		<div id="table">
-		</div>
-		<div class="cell add" id="col-add" onclick="addCol()">
+		<div class="table-test"></div>
+		<button class="cell edit add col-add">
 			<i class="fas fa-plus"></i>
-		</div>
-		<div class="cell add" id="row-add" onclick="addRow()">
+		</button>
+		<button class="cell edit add row-add">
 			<i class="fas fa-plus"></i>
-		</div>
-	</div>
+		</button>
+	</div>	
 	<script src="./main.js"></script>
 </body>
 </html>

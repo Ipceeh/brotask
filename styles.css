@@ -5,21 +5,24 @@ body{
 }
 
 button{
-	display: block;
-	margin: 10px;
+	border: none;
+	outline: none;
+	margin: 0;
+	padding: 0;
 }
 
 .container{
 	display: inline-grid;
 	margin: 50px;
-
+	grid-template-rows: auto auto auto;
+	grid-template-columns: auto auto auto;
 	grid-template-areas:
 	". 		cols 	."
 	"rows 	cells 	col-add"
 	". 		row-add .";
 }
 
-#table{
+.table-test{
 	width: auto;
 	height: auto;
 	display: inline-grid;
@@ -32,94 +35,74 @@ button{
 	z-index: 5;
 }
 
+.vector{
+	width: auto;
+	height: auto;
+}
+
+.vector-col{	
+	padding-bottom: 2px;
+	grid-area: cols;
+}
+
+.vector-row{
+	padding-right: 2px;
+	grid-area: rows;
+}
+
 .cell{
 	width: 50px;
 	height: 50px;
 	background-color: #48AAE7;
 }
 
-#col-vector{
-	width: auto;
-	height: auto;
-	display: inline-grid;
-	grid-template-columns: repeat(4, auto);
-	grid-column-gap: 2px;
-	grid-area: cols;
-	margin: 2px 3px;
-}
-
-#row-vector{
-	width: auto;
-	height: auto;
-	display: inline-grid;
-	grid-template-rows: repeat(4, auto);
-	grid-row-gap: 2px;
-	grid-area: rows;
-	margin: 3px 2px;
-}
-
-.del{
+.edit{
 	color: #fff;
 	font-weight: bold;
 	text-align: center;
 	font-size: 10px;
 	vertical-align: center;	
 	line-height: 50px;
+	cursor: pointer;
+	transition: background-color 0.25s linear;
+}
+
+.del{	
 	position: relative;
 	background-color: #B20000;
-	cursor: pointer;
-	opacity: 0.3;
+	opacity: 0.7;
 	visibility: hidden;
-	transition: visibility 0.15s linear 0.05s,
-				opacity 0.15s linear 0.05s,
-				top 0.15s linear 0.05s,
-				left 0.15s linear 0.05s,
-				background-color 0.2s linear;
+	transition: visibility 0.15s linear,
+				opacity 0.2s linear 0.1s,
+				top 0.2s ease-out,
+				left 0.2s ease-out,
+				background-color 0.4s linear;
 }
 
-#col-vector > .del{
-	top: 50px;
-}
-
-#row-vector > .del{
-	left: 50px;
-}
-
-#col-vector > .visible, 
-#row-vector > .visible{
+.visible{
 	visibility: visible;
 	opacity: 1;
-	top: 0;
-	left: 0;
 }
 
 .del:hover{
 	background-color: #CA4C49;
 }
 
-.add{
-	color: #fff;
-	font-weight: bold;
-	text-align: center;
-	font-size: 10px;
-	vertical-align: center;
-	line-height: 50px;
+.add{	
 	margin: 2px;
 	background-color: #F3A500;
-	transition: background-color 0.5s ease-in-out;
-	cursor: pointer;
 }
 
 .add:hover{
 	background-color: #F7C052;
 }
 
-#col-add{
+.col-add{
 	margin-top: 3px;
 	grid-area: col-add;
 }
 
-#row-add{
+.row-add{
 	margin-left: 3px;
 	grid-area: row-add;
 }

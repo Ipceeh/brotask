@@ -1,167 +1,159 @@
-var
-	colN = [0,1,2,3,4],
-	rowN = [0,1,2,3,4];
-var 
-	colVector = document.getElementById('col-vector'),
-	rowVector = document.getElementById('row-vector'),
-	table = document.getElementById('table');
+class Table {
+  constructor(id, rowSize, colSize) {
+    this.rowN = [];
+    this.colN = [];
+    this.nextCol = colSize + 1;
+    this.nextRow = rowSize + 1;
+    this.currentCol = null;
+    this.currentRow = null;
 
-for (let i = 1; i < rowN.length; i++)
-{
-	createCell(i, 0, rowVector);
-	for (let j = 1; j < colN.length; j++){
-		createCell(i, j, table);
+    this.elemDOM = document.getElementById(id);
+    this.elemDOM.onmouseover = this.hoverCell.bind(this);
+    this.elemDOM.onmouseout = this.hideDel.bind(this);
+    this.elemDOM.onclick = this.click.bind(this);
 
-	}
+    this.tableDOM = this.elemDOM.querySelectorAll(".table-test")[0];
+    this.rowDelDOM = this.elemDOM.querySelectorAll(".vector-row > .del")[0];
+    this.colDelDOM = this.elemDOM.querySelectorAll(".vector-col > .del")[0];
+
+    for (let i = 1; i <= rowSize; i++) {
+      this.rowN.push(i);
+    }
+    for (let i = 1; i <= colSize; i++) {
+      this.colN.push(i);
+    }
+
+    for (let i = 1; i <= rowSize; i++) {
+      for (let j = 1; j <= colSize; j++) {
+        this.createCell(i, j);
+      }
+    }
+
+    this.upgradeSize();
+  }
+
+  createCell(row, col) {
+    let td = document.createElement("TD");
+    td.className = "cell";
+    td.setAttribute("row", row);
+    td.setAttribute("col", col);
+
+    if (col === this.nextCol && row != this.rowN[this.rowN.length - 1]) {
+      this.tableDOM.insertBefore(td, this.getCell(row, col, true));
+    } else {
+      this.tableDOM.insertBefore(td, null);
+    }
+  }
+
+  getCell(row, col, next) {
+    let nextColID = this.colN[0],
+      nextRowID = this.rowN[this.rowN.indexOf(row) + 1];
+    if (!next) {
+      nextColID = col;
+      nextRowID = row;
+    }
+
+    for (let i = this.tableDOM.childNodes.length - 1; i >= 0; i--) {
+      if (
+        +this.tableDOM.childNodes[i].getAttribute("row") === nextRowID &&
+        +this.tableDOM.childNodes[i].getAttribute("col") === nextColID
+      ) {
+        return this.tableDOM.childNodes[i];
+      }
+    }
+
+    return null;
+  }
+
+  addCol() {
+    this.colN.push(this.nextCol);
+    for (let i = 0; i < this.rowN.length; i++) {
+      this.createCell(this.rowN[i], this.nextCol);
+    }
+    this.nextCol++;
+    this.upgradeSize();
+  }
+
+  addRow() {
+    this.rowN.push(this.nextRow);
+    for (let i = 0; i < this.colN.length; i++) {
+      this.createCell(this.nextRow, this.colN[i]);
+    }
+    this.nextRow++;
+    this.upgradeSize();
+  }
+
+  upgradeSize() {
+    this.tableDOM.style.gridTemplateColumns =
+      "repeat(" + this.colN.length + ", auto";
+    this.tableDOM.style.gridTemplateRows =
+      "repeat(" + this.rowN.length + ", auto";
+  }
+
+  hoverCell(event) {
+    let cell = event.target;
+    if (cell.tagName == "TD") {
+      this.colDelDOM.style.left =
+        cell.offsetLeft - this.tableDOM.offsetLeft + "px";
+      this.rowDelDOM.style.top =
+        cell.offsetTop - this.tableDOM.offsetTop + "px";
+      this.currentRow = +cell.getAttribute("row");
+      this.currentCol = +cell.getAttribute("col");
+    }
+
+    if (
+      cell.tagName == "TD" ||
+      cell == this.rowDelDOM ||
+      cell == this.colDelDOM
+    ) {
+      if (this.rowN.length > 1) this.rowDelDOM.classList.add("visible");
+      if (this.colN.length > 1) this.colDelDOM.classList.add("visible");
+    }
+  }
+
+  hideDel() {
+    this.rowDelDOM.classList.remove("visible");
+    this.colDelDOM.classList.remove("visible");
+  }
+
+  click(event) {
+    let cell = event.target;
+    while (cell != this.elemDOM) {
+      if (cell == this.rowDelDOM) this.deleteRow();
+      if (cell == this.colDelDOM) this.deleteCol();
+      if (cell == this.elemDOM.querySelectorAll(".row-add")[0]) this.addRow();
+      if (cell == this.elemDOM.querySelectorAll(".col-add")[0]) this.addCol();
+      cell = cell.parentNode;
+    }
+  }
+
+  deleteCol() {
+    let col = this.currentCol;
+    if (this.colN.length <= 1 || col == 0) return;
+    for (let i = 0; i < this.rowN.length; i++) {
+      this.tableDOM.removeChild(this.getCell(this.rowN[i], col, false));
+    }
+
+    this.colN.splice(this.colN.indexOf(col), 1);
+    this.upgradeSize();
+    this.hideDel();
+    this.currentCol = 0;
+    this.currentRow = 0;
+  }
+
+  deleteRow() {
+    let row = this.currentRow;
+    if (this.rowN.length <= 1 || row == 0) return;
+    for (let i = 0; i < this.colN.length; i++) {
+      this.tableDOM.removeChild(this.getCell(row, this.colN[i], false));
+    }
+
+    this.rowN.splice(this.rowN.indexOf(row), 1);
+    this.upgradeSize();
+    this.hideDel();
+    this.currentCol = 0;
+    this.currentRow = 0;
+  }
 }
 
-for (let j = 1; j < colN.length; j++){
-		createCell(0, j, colVector);
-	}
-
-	
-
-
-
-function createCell(rowNum, colNum, parent){
-	var nextColID,
-		nextRowID,
-		div = document.createElement('div');
-
-	div.id = toID(rowN[rowNum], colN[colNum]);
-	div.onmouseover = function(){
-		hoverCell(div, true);
-	};
-
-	div.onmouseout = function(){
-		hoverCell(div, false);
-	}
-
-// looking for correct position
-	if (parent == table){
-		div.className = "cell";		
-
-		if (colNum >= colN.length - 1){
-				nextColID = colN[1];
-				nextRowID = rowN[rowNum + 1];
-				parent.insertBefore(div, document.getElementById(toID(nextRowID, nextColID)));	
-			}else{
-				parent.insertBefore(div, null);
-			}
-
-
-	}else{
-		div.className = "cell del";
-		div.innerHTML="<i class='fas fa-minus'></i>";
-
-		if (parent == colVector){
-			div.onclick = function() {
-				deleteCol(div);
-			}
-		}else{
-			div.onclick = function() {
-				deleteRow(div);
-			}
-		}
-		parent.insertBefore(div, null);
-	}
-	
-}
-
-function addCol() {
-	colN[colN.length] = colN[colN.length-1]+1;
-	for (let i = 1; i < rowN.length; i++){
-		createCell(i, colN.length -1, table);
-	}
-	createCell(0, colN.length -1, colVector);
-
-	let len = colN.length -1;
-	table.style.gridTemplateColumns = "repeat(" + len + ", auto)";
-	colVector.style.gridTemplateColumns = "repeat(" + len + ", auto)";
-}
-
-function addRow() {
-	rowN[rowN.length] = rowN[rowN.length-1]+1;
-	for (let i = 1; i < colN.length; i++){
-		createCell(rowN.length - 1, i,table);
-	}
-	createCell(rowN.length -1, 0, rowVector);
-
-	let len = rowN.length -1;
-	table.style.gridTemplateRows = "repeat(" + len + ", auto)";
-	rowVector.style.gridTemplateRows = "repeat(" + len + ", auto)";
-}
-
-function deleteCol(elem){
-	if (colN.length<=2) return;
-	let 
-		col = +elem.id.slice(-3);
-	for (let i = 1; i < rowN.length; i++){
-		table.removeChild(document.getElementById(toID(rowN[i], col)));
-	}
-
-	colVector.removeChild(document.getElementById(toID(0, col)));
-	colN.splice(colN.findIndex(function(element, index){
-		if (element == col) return index;
-	}), 1);
-
-	let len = colN.length -1;
-	table.style.gridTemplateColumns = "repeat(" + len + ", auto)";
-	colVector.style.gridTemplateColumns = "repeat(" + len + ", auto)";
-}
-
-function deleteRow(elem){
-	if (rowN.length<=2) return;
-	let 
-		row = +elem.id.slice(0,3);
-	for (let i = 1; i < colN.length; i++){
-		table.removeChild(document.getElementById(toID(row, colN[i])));
-	}
-
-	rowVector.removeChild(document.getElementById(toID(row, 0)));
-	rowN.splice(rowN.findIndex(function(element, index){
-		if (element == row) return index;
-	}), 1);
-
-	let len = rowN.length - 1;
-	table.style.gridTemplateRows = "repeat(" + len + ", auto)";
-	rowVector.style.gridTemplateRows = "repeat(" + len + ", auto)";
-}
-
-function hoverCell(elem, key){
-	let
-		row,
-		col;
-	
-	row = +elem.id.slice(0,3);
-	col = +elem.id.slice(-3);
-	if (!key) {
-		hideAllDel();	
-		return;
-	}
-	if (col != 0 || row != 0 && key){
-		hideAllDel();
-		showDel(row,col);    	
-	}
-}
-
-function hideAllDel(){
-	let
-		delElem = document.getElementsByClassName('del');
-	for(let i = 0; i < delElem.length; i++){
-		delElem[i].classList.remove("visible");	
-	}
-}
-
-function showDel(row, col){
-	if (col && colN.length>2) document.getElementById(toID(0, col)).classList.add("visible");
-	if (row && rowN.length>2) document.getElementById(toID(row, 0)).classList.add("visible");
-
-}
-
-function toID(row, col){
-	let
-		rowID = '000' + row,
-		colID = '000' + col;
-	return rowID.slice(-3)+colID.slice(-3);
-}
+var table1 = new Table("tab1", 4, 4);
