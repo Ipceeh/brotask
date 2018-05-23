@@ -13,8 +13,8 @@ class Table {
     this.elemDOM.onmouseout = this.hideDel.bind(this);
     this.elemDOM.onclick = this.click.bind(this);
     this.elemDOM.onmousedown = this.cutCell.bind(this);
-    document.addEventListener('mousemove', this.followCursor.bind(this));
-    document.addEventListener('mouseup', this.pasteCell.bind(this));
+    document.addEventListener("mousemove", this.followCursor.bind(this));
+    document.addEventListener("mouseup", this.pasteCell.bind(this));
 
     this.tableDOM = this.elemDOM.querySelectorAll(".table-test")[0];
     this.rowDelDOM = this.elemDOM.querySelectorAll(".vector-row > .del")[0];
@@ -33,7 +33,6 @@ class Table {
         this.createCell(i, j);
       }
     }
-    console.log(this);
     this.upgradeTable();
   }
 
