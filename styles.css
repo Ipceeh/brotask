@@ -56,6 +56,11 @@ button{
 	background-color: #48AAE7;
 }
 
+.dragging{
+	position: absolute;
+	box-shadow: 0 0 5px 3px #eee;
+}
+
 .edit{
 	color: #fff;
 	font-weight: bold;
