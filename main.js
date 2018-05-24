@@ -245,12 +245,12 @@ class Table {
   stopFollowing(move) {
     this.shadowDOM.remove();
     if (move) {
+      this.dragDOM.remove();
       let temp = this.getCell(
         +this.shadowDOM.dataset.row,
         +this.shadowDOM.dataset.col,
         true
       );
-      this.dragDOM.remove();
       this.tableDOM.insertBefore(this.dragDOM, temp);
     }
     this.isDragging = false;
