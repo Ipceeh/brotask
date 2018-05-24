@@ -58,7 +58,7 @@ button{
 
 .dragging{
 	position: absolute;
-	box-shadow: 0 0 5px 3px #eee;
+	box-shadow: 0 0 5px 5px #eee;
 }
 
 .edit{

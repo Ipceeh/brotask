@@ -20,6 +20,7 @@ class Table {
     this.rowDelDOM = this.elemDOM.querySelectorAll(".vector-row > .del")[0];
     this.colDelDOM = this.elemDOM.querySelectorAll(".vector-col > .del")[0];
     this.dragDOM = null;
+    this.shadowDOM = null;
 
     for (let i = 1; i <= rowSize; i++) {
       this.rowN.push(i);
@@ -42,28 +43,23 @@ class Table {
     div.dataset.row = row;
     div.dataset.col = col;
 
-    if (col === this.nextCol && row != this.rowN[this.rowN.length - 1]) {
+    if (col === this.nextCol && row !== this.rowN[this.rowN.length - 1]) {
       this.tableDOM.insertBefore(div, this.getCell(row, col, true));
     } else {
       this.tableDOM.insertBefore(div, null);
     }
+    return div;
   }
 
   getCell(row, col, next) {
-    let nextColID = this.colN[0],
-      nextRowID = this.rowN[this.rowN.indexOf(row) + 1];
-    if (!next) {
-      nextColID = col;
-      nextRowID = row;
-    }
-
     for (let i = this.tableDOM.childNodes.length - 1; i >= 0; i--) {
       if (
-        +this.tableDOM.childNodes[i].dataset.row === nextRowID &&
-        +this.tableDOM.childNodes[i].dataset.col === nextColID
-      ) {
-        return this.tableDOM.childNodes[i];
-      }
+        +this.tableDOM.childNodes[i].dataset.row === row &&
+        +this.tableDOM.childNodes[i].dataset.col === col
+      )
+        return next === true
+          ? this.tableDOM.childNodes[i + 1]
+          : this.tableDOM.childNodes[i];
     }
 
     return null;
@@ -200,23 +196,24 @@ class Table {
       this.isDragging = true;
       this.dragDOM = cell;
       this.dragDOM.classList.add("dragging");
+      this.shadowDOM = this.createCell();
+      this.shadowDOM.style.opacity = "0";
+      this.followCursor(event);
     }
-    this.hideDel();
-    this.followCursor(event);
   }
 
   pasteCell(event) {
     // get element under cursor
-    this.dragDOM.style.visibility = "hidden";
-    let cell = document.elementFromPoint(event.clientX, event.clientY);
-    this.dragDOM.style.visibility = "";
-
     if (this.isDragging === true) {
-      if (cell === this.tableDOM) {
+      this.dragDOM.style.visibility = "hidden";
+      let cell = document.elementFromPoint(event.clientX, event.clientY);
+      this.dragDOM.style.visibility = "";
+
+      if (cell === this.tableDOM || cell.parentNode === this.tableDOM) {
         this.stopFollowing(true);
-      } else if (cell.parentNode === this.tableDOM) {
-        this.stopFollowing(true, cell);
-      } else this.stopFollowing(false);
+      } else {
+        this.stopFollowing(false);
+      }
     }
     this.upgradeTable();
   }
@@ -227,18 +224,58 @@ class Table {
         event.pageY - this.dragDOM.offsetHeight / 2 + "px";
       this.dragDOM.style.left =
         event.pageX - this.dragDOM.offsetWidth / 2 + "px";
+
+      this.dragDOM.style.visibility = "hidden";
+      let cell = document.elementFromPoint(event.clientX, event.clientY);
+      this.dragDOM.style.visibility = "";
+
+      if (cell.parentNode === this.tableDOM) {
+        if (cell !== this.shadowDOM) {
+          let y, x;
+          [y, x] = this.getPosition(event.clientX, event.clientY);
+          this.shadowDOM.style.gridArea =
+            y + " / " + x + " / " + (y + 1) + " / " + (x + 1);
+          this.shadowDOM.dataset.row = y;
+          this.shadowDOM.dataset.col = x;
+        }
+      }
     }
   }
 
-  stopFollowing(move, elem) {
+  stopFollowing(move) {
+    this.shadowDOM.remove();
     if (move) {
+      let temp = this.getCell(
+        +this.shadowDOM.dataset.row,
+        +this.shadowDOM.dataset.col,
+        true
+      );
       this.dragDOM.remove();
-      this.tableDOM.insertBefore(this.dragDOM, elem);
+      this.tableDOM.insertBefore(this.dragDOM, temp);
     }
     this.isDragging = false;
     this.dragDOM.classList.remove("dragging");
     this.dragDOM.style.top = "";
     this.dragDOM.style.left = "";
+  }
+
+  getPosition(x, y) {
+    let xn = 1,
+      yn = 1;
+    y = y - this.tableDOM.offsetTop;
+    x = x - this.tableDOM.offsetLeft;
+
+    while (y > this.shadowDOM.offsetHeight) {
+      y = y - (this.shadowDOM.offsetHeight + this.tableDOM.style.gridRowGap);
+      yn++;
+    }
+    while (x > this.shadowDOM.offsetWidth) {
+      x = x - (this.shadowDOM.offsetWidth + this.tableDOM.style.gridColumnGap);
+      xn++;
+    }
+    if (xn > this.colN.length) xn = this.colN.length;
+    if (yn > this.rowN.length) yn = this.rowN.length;
+    return [yn, xn];
   }
 }
 
