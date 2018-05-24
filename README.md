@@ -1,6 +1,8 @@
 # ipceeh.github.io
 task for brocoders
-## update 24.05.18
+## update 24.05.18b
+bug fixes
+## update 24.05.18a
 added some beautiful changes - now it's a free space under the cursor while dragging
 ### drag-n-drop change:
 * now puts element on free space
