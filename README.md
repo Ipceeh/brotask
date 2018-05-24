@@ -1,10 +1,16 @@
 # ipceeh.github.io
 task for brocoders
+## update 24.05.18
+added some beautiful changes - now it's a free space under the cursor while dragging
+### drag-n-drop change:
+* now puts element on free space
+* on mouseup outside the table element returns back to its position
+P.S. have a rare bug on 'stopFollowing' method, but can't even catch it by my will
 ## update 23.05.18
 fixed del-button disappearing, added comment to 'click' method, added drag-n-drop function
 ### drag-n-drop features
 * on mouseup puts element before cell, which you are pointing
-* on mouseup outside the table element returns back on its position
+* on mouseup outside the table element returns back to its position
 * on mouseup while pointing table (not it's children) puts element as a last child of the table
 * recalculate indexes after dropping
 
