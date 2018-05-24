@@ -209,7 +209,11 @@ class Table {
       let cell = document.elementFromPoint(event.clientX, event.clientY);
       this.dragDOM.style.visibility = "";
 
-      if (cell === this.tableDOM || cell.parentNode === this.tableDOM) {
+      if (
+        !cell ||
+        cell === this.tableDOM ||
+        cell.parentNode === this.tableDOM
+      ) {
         this.stopFollowing(true);
       } else {
         this.stopFollowing(false);
@@ -228,6 +232,7 @@ class Table {
       this.dragDOM.style.visibility = "hidden";
       let cell = document.elementFromPoint(event.clientX, event.clientY);
       this.dragDOM.style.visibility = "";
+      if (!cell) return;
 
       if (cell.parentNode === this.tableDOM) {
         if (cell !== this.shadowDOM) {
