@@ -4,8 +4,9 @@ task for brocoders
 added some beautiful changes - now it's a free space under the cursor while dragging
 ### drag-n-drop change:
 * now puts element on free space
-* on mouseup outside the table element returns back to its position<br>
-P.S. have a rare bug on 'stopFollowing' method, but can't even catch it by my will
+* on mouseup outside the table element returns back to its position
+<br>
+P.S. have a rare bug on 'stopFollowing' method, but can't even catch it by my will<br>
 ## update 23.05.18
 fixed del-button disappearing, added comment to 'click' method, added drag-n-drop function
 ### drag-n-drop features
