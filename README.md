@@ -1,5 +1,10 @@
 # ipceeh.github.io
 task for brocoders
+## update 08.07.2018
+added react branch
+### have some issues
+* can't run tests. litteraly don't know how to make it work
+* make a cdn version for github because have lack of experiance with npm
 ## update 24.05.18b
 bug fixes
 ## update 24.05.18a
