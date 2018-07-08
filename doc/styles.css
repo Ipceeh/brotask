@@ -1,0 +1,113 @@
+html,
+body{
+	padding: 0;
+	margin: 0;
+}
+
+button{
+	border: none;
+	outline: none;
+	margin: 0;
+	padding: 0;
+}
+
+.container{
+	display: inline-grid;
+	margin: 50px;
+	grid-template-rows: auto auto auto;
+	grid-template-columns: auto auto auto;
+	grid-template-areas:
+	". 		cols 	."
+	"rows 	cells 	col-add"
+	". 		row-add .";
+}
+
+.table-test{
+	width: auto;
+	height: auto;
+	display: inline-grid;
+	grid-template-columns: repeat(4, auto);
+	grid-column-gap: 2px;
+	grid-row-gap: 2px;
+	border: 1px solid #48AAE7;
+	padding: 2px;
+	grid-area: cells;
+	z-index: 5;
+}
+
+.vector{
+	width: auto;
+	height: auto;
+}
+
+.vector-col{	
+	padding-bottom: 2px;
+	grid-area: cols;
+}
+
+.vector-row{
+	padding-right: 2px;
+	grid-area: rows;
+}
+
+.cell{
+	width: 50px;
+	height: 50px;
+	background-color: #48AAE7;
+}
+
+.dragging{
+	position: absolute;
+	box-shadow: 1px 1px 2px 2px #ddd;
+}
+
+.edit{
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+	font-size: 10px;
+	vertical-align: center;	
+	line-height: 100%;
+	cursor: pointer;
+	transition: background-color 0.25s linear;
+}
+
+.del{	
+	position: relative;
+	background-color: #B20000;
+	opacity: 0.7;
+	visibility: hidden;
+	transition: visibility 0.15s linear,
+				opacity 0.2s linear 0.1s,
+				top 0.2s ease-out,
+				left 0.2s ease-out,
+				background-color 0.4s linear;
+}
+
+.visible{
+	visibility: visible;
+	opacity: 1;
+}
+
+.del:hover{
+	background-color: #CA4C49;
+}
+
+.add{	
+	margin: 2px;
+	background-color: #F3A500;
+}
+
+.add:hover{
+	background-color: #F7C052;
+}
+
+.col-add{
+	margin-top: 3px;
+	grid-area: col-add;
+}
+
+.row-add{
+	margin-left: 3px;
+	grid-area: row-add;
+}
