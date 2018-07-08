@@ -1,5 +1,9 @@
 # ipceeh.github.io
 task for brocoders
+## update 08.07.2018
+* make a react version
+* no tests because i am a completely newbie with CLI and GH
+* a cdn version on gh-pages because of the same reason
 ## update 24.05.18b
 bug fixes
 ## update 24.05.18a
