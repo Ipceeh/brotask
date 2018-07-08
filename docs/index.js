@@ -52,7 +52,7 @@ class DelCol extends React.Component {
   }
 }
 
-export default class Table extends React.Component {
+class Table extends React.Component {
   renderCell(row, col) {
     return (
       <Cell
