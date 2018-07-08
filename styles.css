@@ -67,7 +67,7 @@ button{
 	text-align: center;
 	font-size: 10px;
 	vertical-align: center;	
-	line-height: 50px;
+	line-height: 100%;
 	cursor: pointer;
 	transition: background-color 0.25s linear;
 }
